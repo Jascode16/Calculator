@@ -14,7 +14,19 @@ class _MyHomePageState extends State<CalculatorScreen> {
   String current = "0";
   String previous = "";
   String operator = "";
-
+  bool justCalculated = false;
+  
+  String formatResult(double result) {
+    //gives the answer in integer when necessary and gives in decimal when necessary
+    if (result % 1 == 0) {
+      return result.toInt().toString();
+    } else {
+      return result.toStringAsFixed(10)
+          .replaceAll(RegExp(r'0*$'), '')
+          .replaceAll(RegExp(r'\.$'), '');
+    }
+  }
+  
   void onButtonPressed(String value) {
     setState(() {
       // if the c button was touched remove one number
@@ -22,7 +34,11 @@ class _MyHomePageState extends State<CalculatorScreen> {
         if(current == "Error") {
           current = "0";
           past = "";
+        } else if(justCalculated = true){
+          current = "0";
+          past = "";
         }
+
         else if (current.length > 1) {
           current = current.substring(0, current.length -1);
         } else {
@@ -40,6 +56,12 @@ class _MyHomePageState extends State<CalculatorScreen> {
 
       //operators handling(+,-,x,/)
       if(value == "\u00F7" || value == "\u00D7" || value == "\u2212" || value == "\u002B") {
+        if (previous.isNotEmpty && current == "0") {
+          operator = value;
+          past = "$previous $operator";
+          return;
+        }
+
         previous = current;
         operator = value;
         past = "$previous $operator";
@@ -49,6 +71,7 @@ class _MyHomePageState extends State<CalculatorScreen> {
 
       //performing the operation
       if(value == '=') {
+        justCalculated = true;
         if (previous.isEmpty || operator.isEmpty) return;
 
         double num1 = double.parse(previous);
@@ -76,8 +99,10 @@ class _MyHomePageState extends State<CalculatorScreen> {
             break;
         }
 
-        current = result.toString();
-        past = "";
+
+          current = formatResult(result);
+
+        past = "$previous $operator $current ";
         previous = "";
         operator = "";
         return;

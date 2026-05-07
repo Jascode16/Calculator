@@ -21,10 +21,18 @@ class CalculatorDisplay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
-            child: Text(past, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: buildTextStyle(
-              size: 36,
-              color: Color(0XFF7E5BB8),
-            ),),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              reverse: true,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Text(past,  style: buildTextStyle(
+                  size: 36,
+                  color: Color(0XFF7E5BB8),
+                ),),
+              ),
+            ),
           ),
           SizedBox(height: 10),
           Expanded(
@@ -57,3 +65,5 @@ TextStyle buildTextStyle(
   );
 }
 //Widget Style
+
+//child: Text(past, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right,
