@@ -7,8 +7,8 @@ class CalculatorDisplay extends StatelessWidget {
    final String current;
   const CalculatorDisplay({
     super.key,
-    this.past = '15',
-    this.current = '10'});
+    required this.past ,
+    required this.current});
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +20,23 @@ class CalculatorDisplay extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(past, style: buildTextStyle(
-            size: 36,
-            color: Color(0XFF7E5BB8),
-          ),),
+          Expanded(
+            child: Text(past, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: buildTextStyle(
+              size: 36,
+              color: Color(0XFF7E5BB8),
+            ),),
+          ),
           SizedBox(height: 10),
-          Text(current, style: buildTextStyle(
-            size: 75,
-            weight: FontWeight.bold,
-          ),),
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(current, style: buildTextStyle(
+                size: 75,
+                weight: FontWeight.bold,
+              ),),
+            ),
+          ),
         ],
       ),
     );

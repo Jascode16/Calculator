@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class CalculatorBody extends StatefulWidget {
-  const CalculatorBody({super.key});
+  final Function(String) onPressed;
+  const CalculatorBody({super.key, required this.onPressed});
 
   @override
   State<CalculatorBody> createState() => _CalculatorBodyState();
@@ -37,8 +38,11 @@ class _CalculatorBodyState extends State<CalculatorBody> {
     int itemCount = buttons.length;
 
     Color getButtonColor(String label) {
-      if (['=', '\u002B', '\u2212', '\u00D7', '\u00F7'].contains(label)) return Color(0XFF50209F);
-      if (['C', '+/-','%',].contains(label)){return Color(0XFF7E5BB8);}
+      if (['=', '\u002B', '\u2212', '\u00D7', '\u00F7'].contains(label))
+        return Color(0XFF50209F);
+      if (['C', '+/-', '%'].contains(label)) {
+        return Color(0XFF7E5BB8);
+      }
       return Color(0XFFE8DDF2);
     }
 
@@ -82,6 +86,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                       setState(() {
                         pressedButton.remove(index);
                       });
+                      widget.onPressed(label);
                     },
                     onTapCancel: () {
                       setState(() {
@@ -94,10 +99,12 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                     highlightColor: Colors.white.withValues(alpha: 0.1),
                     child: AnimatedScale(
                       duration: const Duration(milliseconds: 100),
-                      scale: pressedButton.contains(index) ? 0.92: 1.0,
+                      scale: pressedButton.contains(index) ? 0.92 : 1.0,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: pressedButton.contains(index) ? getButtonColor(label).withValues(alpha: 0.7) : getButtonColor(label),
+                          color: pressedButton.contains(index)
+                              ? getButtonColor(label).withValues(alpha: 0.7)
+                              : getButtonColor(label),
                           borderRadius: BorderRadius.circular(38),
                         ),
                         alignment: Alignment.center,
